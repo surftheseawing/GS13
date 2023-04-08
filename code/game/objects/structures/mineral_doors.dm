@@ -167,6 +167,54 @@
 /obj/structure/mineral_door/uranium/ComponentInitialize()
 	return
 
+/obj/structure/mineral_door/calorite //GS13
+	name = "calorite door"
+	icon_state = "paperframe"
+	sheetType = /obj/item/stack/sheet/mineral/calorite
+	max_integrity = 200
+	light_range = 1
+	var/fat_to_add = 50
+
+/obj/structure/mineral_door/calorite/CanPass(mob/living/carbon/M)
+	if(istype(M, /mob/living/carbon))
+		if(M.fatness >= 200 && state == 1)
+			M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
+			M.Stun(10)
+			M.visible_message("<span class='boldnotice'>[M]'s sides briefly brush against the doorway.</span>", "<span class='boldwarning'>You feel your sides briefly brush against the doorway.</span>")
+		else
+			M.visible_message("<span class='boldnotice'>[M]'s LOL.</span>", "<span class='boldwarning'>LOL.</span>")
+	else
+		return FALSE
+
+
+// /obj/structure/mineral_door/calorite/CanPass(atom/movable/mover, turf/target)
+// 	if(ishuman(mover))
+// 		var/mob/living/carbon/human/fatso = mover
+// 		var/threat = fatso.check_virus()
+// 		switch(threat)
+// 			if(DISEASE_SEVERITY_MINOR, DISEASE_SEVERITY_MEDIUM, DISEASE_SEVERITY_HARMFUL, DISEASE_SEVERITY_DANGEROUS, DISEASE_SEVERITY_BIOHAZARD)
+// 				if(buzzcd < world.time)
+// 					playsound(get_turf(src),'sound/machines/buzz-sigh.ogg',65,1,4)
+// 					buzzcd = (world.time + 60)
+// 				icon_state = "holo_medical-deny"
+// 				return FALSE
+// 			else
+// 				return TRUE //nice or benign diseases!
+// 	return TRUE
+
+	// if(istype(M, /mob/living/carbon) && M.fatness >= FATNESS_LEVEL_BARELYMOBILE && density == FALSE)
+	// 	M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
+	// 	M.Stun(100)
+	// 	M.visible_message("<span class='boldnotice'>[M] gets stuck in the doorway!</span>", "<span class='boldwarning'>You feel yourself get stuck in the doorway!</span>")
+	// if(istype(M, /mob/living/carbon) && M.fatness >= FATNESS_LEVEL_MORBIDLY_OBESE && density == FALSE)
+	// 	M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
+	// 	M.Stun(50)
+	// 	M.visible_message("<span class='boldnotice'>[M] barely squeezes through the doorway!</span>", "<span class='boldwarning'>You feel your sides barely squeeze through the doorway!</span>")
+	// if(istype(M, /mob/living/carbon) && M.fatness >= FATNESS_LEVEL_FATTER && density == FALSE)
+	// 	M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
+	// 	M.Stun(10)
+	// 	M.visible_message("<span class='boldnotice'>[M]'s sides briefly brush against the doorway.</span>", "<span class='boldwarning'>You feel your sides briefly brush against the doorway.</span>")
+
 /obj/structure/mineral_door/sandstone
 	name = "sandstone door"
 	icon_state = "sandstone"
