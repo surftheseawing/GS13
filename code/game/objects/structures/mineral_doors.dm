@@ -175,9 +175,10 @@
 	light_range = 1
 	var/fatten = FALSE // whether player will be fattened
 	var/fatten_delay = 1 // ticks per periodic loop
-	var/fat_to_add = 0 // set in proc/Fatten
+	var/fat_to_add = 1 // fatness per tick stunned
 	var/stuck = FALSE // whether player is stuck
 	var/stuck_delay = 0 // set in proc/Fatten
+	var/blocked = FALSE // whether door is blocked
 
 // override /obj/structure/mineral_door/proc/Open()
 /obj/structure/mineral_door/calorite/Open() //GS13
@@ -201,17 +202,18 @@
 
 /obj/structure/mineral_door/calorite/proc/Fatten() //GS13
 	if(state == 1) // door must be open
-		if (!stuck) // check periodically if not blocked
-			addtimer(CALLBACK(src, .proc/Fatten), fatten_delay)
+		// check periodically
+		addtimer(CALLBACK(src, .proc/Fatten), fatten_delay)
 		// check for mobs in open door
 		var/turf/T = get_turf(src)
+		blocked = FALSE
 		for(var/mob/living/carbon/M in T)
+			blocked = TRUE
 			// determine if mob should get stuck and be fattened
 			if(M.fatness >= FATNESS_LEVEL_BARELYMOBILE)
 				fatten = TRUE
 				if (!stuck)
 					stuck_delay = 100
-					fat_to_add = 50
 					M.visible_message(
 						"<span class='boldnotice'>[M] gets stuck in the doorway!</span>",
 						"<span class='boldwarning'>You feel yourself get stuck in the doorway!</span>")
@@ -219,7 +221,6 @@
 				fatten = TRUE
 				if (!stuck)
 					stuck_delay = 50
-					fat_to_add = 10
 					M.visible_message(
 						"<span class='boldnotice'>[M] barely squeezes through the doorway!</span>",
 						"<span class='boldwarning'>You feel your sides barely squeeze through the doorway!</span>")
@@ -227,7 +228,6 @@
 				fatten = TRUE
 				if (!stuck)
 					stuck_delay = 10
-					fat_to_add = 2
 					M.visible_message(
 						"<span class='boldnotice'>[M]'s sides briefly brush against the doorway.</span>",
 						"<span class='boldwarning'>You feel your sides briefly brush against the doorway.</span>")
@@ -235,7 +235,6 @@
 				fatten = TRUE
 				if (!stuck)
 					stuck_delay = 5
-					fat_to_add = 1
 					M.visible_message(
 						"<span class='boldnotice'>[M]'s sides briefly brush against the doorway.</span>",
 						"<span class='boldwarning'>You feel your sides briefly brush against the doorway.</span>")
@@ -244,20 +243,19 @@
 				stuck = FALSE
 				stuck_delay = 0
 
-			// get stuck
-			if (fatten)
-				if (!stuck && (stuck_delay > 0))
+			if (fatten) // get stuck
+				if (!stuck)
 					M.Stun(stuck_delay/2) // give player time to escape
 					stuck = TRUE
-				else if (stuck_delay > 0) // wait for stun to end
+				if (stuck_delay > 0) // wait for stun to end
 					stuck_delay = stuck_delay - fatten_delay
 					if (stuck_delay <= 0)
 						stuck_delay = 0
-						stuck = FALSE
+					// gain weight while stuck
+					M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
 
-			// gain weight while stuck
-			if (stuck)
-				M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
+	if (!blocked)
+		stuck = FALSE // ready to go again
 
 /obj/structure/mineral_door/sandstone
 	name = "sandstone door"
