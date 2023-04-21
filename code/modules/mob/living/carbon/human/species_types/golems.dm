@@ -129,6 +129,7 @@
 	name = "Ignite"
 	desc = "Set yourself aflame, bringing yourself closer to exploding!"
 	check_flags = AB_CHECK_CONSCIOUS
+	icon_icon = 'icons/mob/actions/actions_spells.dmi'
 	button_icon_state = "sacredflame"
 
 /datum/action/innate/ignite/Activate()
