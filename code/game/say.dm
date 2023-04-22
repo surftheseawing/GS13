@@ -108,23 +108,29 @@ GLOBAL_LIST_INIT(freqtospan, list(
 
 #undef ENCODE_HTML_EPHASIS
 
-/atom/movable/proc/lang_treat(atom/movable/speaker, datum/language/language, raw_message, list/spans, message_mode, no_quote = FALSE)
-	if(has_language(language))
-		var/atom/movable/AM = speaker.GetSource()
-		if(AM) //Basically means "if the speaker is virtual"
-			return no_quote ? raw_message : AM.say_quote(raw_message, spans, message_mode)
-		else
-			return no_quote ? raw_message : speaker.say_quote(raw_message, spans, message_mode)
-	else if(language)
-		var/atom/movable/AM = speaker.GetSource()
-		var/datum/language/D = GLOB.language_datum_instances[language]
-		raw_message = D.scramble(raw_message)
-		if(AM)
-			return no_quote ? raw_message : AM.say_quote(raw_message, spans, message_mode)
-		else
-			return no_quote ? raw_message : speaker.say_quote(raw_message, spans, message_mode)
+/atom/movable/proc/get_message(atom/movable/speaker, raw_message, list/spans, message_mode, no_quote = FALSE)
+	var/atom/movable/AM = speaker.GetSource()
+	if(AM) //Basically means "if the speaker is virtual"
+		return no_quote ? raw_message : AM.say_quote(raw_message, spans, message_mode)
+	else
+		return no_quote ? raw_message : speaker.say_quote(raw_message, spans, message_mode)
+
+/atom/movable/proc/lang_scramble(atom/movable/speaker, datum/language/language, raw_message, list/spans, message_mode, no_quote = FALSE)
+	// GS13 Scramble if not your default language, so speakers can hear what they sound like in create_chat_message
+	if(language)
+		if (language != get_default_language())
+			var/datum/language/D = GLOB.language_datum_instances[language]
+			raw_message = D.scramble(raw_message)
+		return get_message(speaker, raw_message, spans, message_mode, no_quote)
 	else
 		return "makes a strange sound."
+
+/atom/movable/proc/lang_treat(atom/movable/speaker, datum/language/language, raw_message, list/spans, message_mode, no_quote = FALSE)
+	// GS13 Scramble if you don't have the language
+	if(has_language(language))
+		return get_message(speaker, raw_message, spans, message_mode, no_quote)
+	else
+		return lang_scramble(speaker, language, raw_message, spans, message_mode, no_quote)
 
 /proc/get_radio_span(freq)
 	var/returntext = GLOB.freqtospan["[freq]"]

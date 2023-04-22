@@ -188,7 +188,8 @@
 		return
 
 	// Display visual above source
-	new /datum/chatmessage(lang_treat(speaker, message_language, raw_message, spans, null, TRUE), speaker, src, spans)
+	// GS13 lang_scramble
+	new /datum/chatmessage(lang_scramble(speaker, message_language, raw_message, spans, null, TRUE), speaker, src, spans)
 
 
 // Tweak these defines to change the available color ranges
