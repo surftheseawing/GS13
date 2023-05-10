@@ -1521,3 +1521,29 @@ datum/reagent/medicine/styptic_powder/overdose_start(mob/living/M)
 	name = "Synthi-Sanguirite"
 	description = "A synthetic coagulant used to help bleeding wounds clot faster. Not quite as effective as name brand Sanguirite, especially on patients with lots of cuts."
 	clot_coeff_per_wound = 0.8
+
+/datum/reagent/medicine/lipolicide // GS13
+	name = "Lipolicide"
+	description = "A powerful toxin that will destroy fat cells, massively reducing body weight in a short time. Deadly to those without nutriment in their body."
+	taste_description = "mothballs"
+	reagent_state = LIQUID
+	color = "#F0FFF0"
+	metabolization_rate = 0.5 * REAGENTS_METABOLISM
+	overdose_threshold = 100
+
+/datum/reagent/medicine/lipolicide/overdose_process(mob/living/carbon/C)
+	. = ..()
+	if(current_cycle >=41 && prob(10))
+		to_chat(C, "<span class='userdanger'>You feel like your organs are on fire!</span>")
+		C.IgniteMob()
+
+/datum/reagent/medicine/lipolicide/on_mob_life(mob/living/carbon/M)
+	if(M.nutrition <= NUTRITION_LEVEL_STARVING)
+		M.adjustToxLoss(1*REM, 0)
+	if(M.fatness == 0)
+		M.nutrition = max(M.nutrition - 3, 0) // making the chef more valuable, one meme trap at a time
+	else
+		M.adjust_fatness(-10, FATTENING_TYPE_WEIGHT_LOSS)
+
+	M.overeatduration = 0
+	return ..()

@@ -600,35 +600,6 @@
 	M.adjustToxLoss(toxdamage)
 	..()
 
-//GS13 change. We'll need the weight loss chem way more than other codebases, let's make it useable.
-/datum/reagent/medicine/lipolicide
-	name = "Lipolicide"
-	description = "A powerful toxin that will destroy fat cells, massively reducing body weight in a short time. Deadly to those without nutriment in their body."
-	taste_description = "mothballs"
-	reagent_state = LIQUID
-	color = "#F0FFF0"
-	metabolization_rate = 0.7 * REAGENTS_METABOLISM
-	overdose_threshold = 105
-
-/datum/reagent/medicine/lipolicide/overdose_process(mob/living/carbon/C)
-	. = ..()
-	if(current_cycle >=41 && prob(10))
-		to_chat(C, "<span class='userdanger'>You feel like your organs are on fire!</span>")
-		C.IgniteMob()
-
-/datum/reagent/medicine/lipolicide/on_mob_life(mob/living/carbon/M)
-	if(M.nutrition <= NUTRITION_LEVEL_STARVING)
-		M.adjustToxLoss(1*REM, 0)
-	if(M.fatness == 0)
-		M.nutrition = max(M.nutrition - 3, 0) // making the chef more valuable, one meme trap at a time
-	if(HAS_TRAIT(M, TRAIT_LIPOLICIDE_TOLERANCE)) //GS13 edit
-		M.adjust_fatness(-1, FATTENING_TYPE_WEIGHT_LOSS)
-	else
-		M.adjust_fatness(-5, FATTENING_TYPE_WEIGHT_LOSS)
-
-	M.overeatduration = 0
-	return ..()
-
 /datum/reagent/toxin/coniine
 	name = "Coniine"
 	description = "Coniine metabolizes extremely slowly, but deals high amounts of toxin damage and stops breathing."
