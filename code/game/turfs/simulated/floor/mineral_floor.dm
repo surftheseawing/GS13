@@ -215,7 +215,7 @@
 	var/last_event = 0
 	var/active = null
 	///How much fatness is added to the user upon crossing?
-	var/fat_to_add = 30
+	var/fat_to_add = ADJUST_FATNESS_CALORITE_FLOOR
 
 /turf/open/floor/mineral/calorite/Entered(mob/living/carbon/M)
 	if(!istype(M, /mob/living/carbon))
@@ -238,7 +238,7 @@
 	icon_state = "calorite_strong"
 	floor_tile = /obj/item/stack/tile/mineral/calorite/strong
 	icons = list("calorite_strong","calorite_dam")
-	fat_to_add = 100
+	fat_to_add = ADJUST_FATNESS_CALORITE_FLOOR_STRONG
 
 // calorite dance floor, groovy! - GS13
 

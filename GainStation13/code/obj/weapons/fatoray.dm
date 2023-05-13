@@ -31,8 +31,7 @@
 	light_range = 2
 	light_color = LIGHT_COLOR_ORANGE
 	///How much fat is added to the target mob?
-	var/fat_added = 100
-
+	var/fat_to_add = ADJUST_FATNESS_ENERGY
 
 ////// Fatoray - cannon variant, strong but can be charged
 
@@ -61,9 +60,7 @@
 	icon = 'GainStation13/icons/obj/fatoray.dmi'
 	icon_state = "cannon_ray"
 	///How much fat is added to the target mob?
-	fat_added = 1000
-
-
+	fat_to_add = ADJUST_FATNESS_ENERGY_CANNON
 
 ////////////////////////////////////////////////////////////////////
 ////////FATORAYS THAT CAN BE MADE BY LATHES OR RESEARCHED///////////
@@ -89,7 +86,7 @@
 	icon = 'GainStation13/icons/obj/fatoray.dmi'
 	icon_state = "ray"
 	///How much fat is added to the target mob?
-	fat_added = 50
+	fat_to_add = ADJUST_FATNESS_ENERGY_WEAK
 
 ///////////////////////////////////////////////////
 
@@ -118,7 +115,7 @@
 	icon = 'GainStation13/icons/obj/fatoray.dmi'
 	icon_state = "cannon_ray"
 	///How much fat is added to the target mob?
-	fat_added = 500
+	fat_to_add = ADJUST_FATNESS_ENERGY_CANNON_WEAK
 
 ///////////////////////////////////////
 //////PROJECTILE MECHANICS/////////////
@@ -132,7 +129,7 @@
 	if(!iscarbon(gainer))
 		return FALSE
 	
-	if(!gainer.adjust_fatness(fat_added, FATTENING_TYPE_WEAPON))
+	if(!gainer.adjust_fatness(fat_to_add, FATTENING_TYPE_WEAPON))
 		return FALSE
 
 	return TRUE

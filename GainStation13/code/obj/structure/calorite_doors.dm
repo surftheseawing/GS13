@@ -9,7 +9,7 @@
 	light_range = 1
 	var/fatten = FALSE // whether player will be fattened
 	var/fatten_delay = 1 // ticks per periodic loop
-	var/fat_to_add = 2 // fatness per tick stunned
+	var/fat_to_add = ADJUST_FATNESS_CALORITE_DOOR // fatness per tick stunned
 	var/stuck = FALSE // whether player is stuck
 	var/stuck_delay = 0 // set in proc/Fatten
 	var/blocked = FALSE // whether door is blocked

@@ -8,11 +8,13 @@
 	reagent_state = LIQUID
 	color = "#e2e1b1"
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
+	var/fat_to_add = ADJUST_FATNESS_REAGENT
 
 /datum/reagent/consumable/lipoifier/on_mob_life(mob/living/carbon/M)
-	M.adjust_fatness(10, FATTENING_TYPE_CHEM)
+	M.adjust_fatness(fat_to_add, FATTENING_TYPE_CHEM)
 	return ..()
 
+// TODO lipoifier OD -> fizulphite
 
 //BURPY CHEM
 
@@ -28,9 +30,17 @@
 	if(M && M?.client?.prefs.weight_gain_chems)
 		M.burpslurring = max(M.burpslurring,50)
 		M.burpslurring += 2
-	else
-		M.burpslurring += 0
-	..()
+		var/amount = M.reagents.get_reagent_amount(/datum/reagent/consumable/fizulphite)
+		if(amount >= 3)
+			to_chat(M,"<span class='notice'>You feel pretty gassy...</span>")
+			M.emote("belch")
+		else if(amount >= 1)
+			to_chat(M,"<span class='notice'>You feel substantially bloated...</span>")
+			M.emote("burp")
+	M.fullness += 6
+	return ..()
+
+// TODO increase fullness
 
 //ANTI-BURPY CHEM
 
@@ -45,14 +55,9 @@
 /datum/reagent/consumable/extilphite/on_mob_life(mob/living/carbon/M)
 	if(M && M?.client?.prefs.weight_gain_chems)
 		M.burpslurring -= 3
-	else
-		M.burpslurring -= 0
-
-	if(M.fullness>10)
-		M.fullness -= 6
-	else
-		M.fullness -= 0
-	..()
+	if(M.fullness > FULLNESS_LEVEL_HALF_FULL)
+		M.fullness -= 10
+	return ..()
 
 //FARTY CHEM
 
@@ -71,9 +76,7 @@
 		if(M.reagents.get_reagent_amount(/datum/reagent/consumable/flatulose) > 3)
 			to_chat(M,"<span class='notice'>You feel pretty gassy...</span>")
 			M.emote(pick("brap","fart")) // we gotta categorize this into "slob" category or something later! - GDLW2
-		..()
-	else
-		return ..()
+	return ..()
 
 // calorite blessing chem, used in the golem ability
 
@@ -86,14 +89,12 @@
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 
 /datum/reagent/consumable/caloriteblessing/on_mob_metabolize(mob/living/L)
-	..()
+	return ..()
 	ADD_TRAIT(L, TRAIT_GOTTAGOFAST, type)
-
 
 /datum/reagent/consumable/caloriteblessing/on_mob_end_metabolize(mob/living/L)
 	REMOVE_TRAIT(L, TRAIT_GOTTAGOFAST, type)
-	..()
-
+	return ..()
 
 //BLUEBERRY CHEM - ONLY CHANGES PLAYER'S COLOR AND NOTHING MORE
 
@@ -109,4 +110,4 @@
 /datum/reagent/blueberry_juice/on_mob_life(mob/living/carbon/M)
 	if(!no_mob_color)
 		M.add_atom_colour(pick(random_color_list), WASHABLE_COLOUR_PRIORITY)
-	..()
+	return ..()

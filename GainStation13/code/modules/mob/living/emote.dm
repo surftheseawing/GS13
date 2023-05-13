@@ -1,3 +1,6 @@
+//Emote effect cooldown
+#define EMOTE_EFFECT_COOLDOWN 50
+
 /datum/emote/living/proc/make_noise(var/mob/living/user, noise_name, pref_toggle)
 	if(!ishuman(user))
 		return FALSE	
@@ -8,17 +11,19 @@
 		if ((pref_toggle == 0) || (M.client && M.client?.prefs?.cit_toggles & pref_toggle))
 			M.playsound_local(source, noise_name, 50, 1, S = noise)
 
-/datum/emote/living/proc/reduce_fullness(var/mob/living/user, fullness_amount) // fullness_amount should be between 5 and 20 for balance and below 80 for functionality
+// fullness_amount should be between 5 and 20 for balance
+/datum/emote/living/proc/reduce_fullness(mob/living/user, fullness_amount)
 	if(!ishuman(user))
 		return FALSE	
+	if(fullness_amount <= 0)
+		return FALSE	
 
-	var/mob/living/N = user
-	if(N.fullness >= FULLNESS_LEVEL_BLOATED && N.fullness_reducion_timer + FULLNESS_REDUCTION_COOLDOWN < world.time)
-		N.fullness -= fullness_amount
-		if(fullness_amount <= 5)
-			to_chat(N, "You felt that make some space")
+	if((user.fullness >= FULLNESS_LEVEL_BLOATED) && (user.fullness_reduction_timer + EMOTE_EFFECT_COOLDOWN < world.time))
+		user.fullness -= fullness_amount
 		if(fullness_amount > 5)
-			to_chat(N, "You felt that make a lot of space")
+			to_chat(user, "You felt that make a lot of space!")
+		else
+			to_chat(user, "You felt that make some space.")
 
 /datum/emote/living/belch
 	key = "belch"
@@ -30,11 +35,10 @@
 /datum/emote/living/belch/run_emote(mob/living/user, params)
 	if(!ishuman(user))
 		return FALSE 
-	
-	make_noise(user, "belch", BURPING_NOISES)
-
 	. = ..()	
-	reduce_fullness(user, rand(6,12))
+	if(.)
+		make_noise(user, "belch", BURPING_NOISES)
+		reduce_fullness(user, rand(ADJUST_FULLNESS_MAJOR_MIN,ADJUST_FULLNESS_MAJOR_MAX))
 
 /datum/emote/living/brap
     key = "brap"
@@ -49,10 +53,10 @@
 	if(!ishuman(user))
 		return FALSE	
 
-	make_noise(user, "brap", FARTING_NOISES)
-
 	. = ..()	
-	reduce_fullness(user, rand(6,12))
+	if(.)
+		make_noise(user, "brap", FARTING_NOISES)
+		reduce_fullness(user, rand(ADJUST_FULLNESS_MAJOR_MIN,ADJUST_FULLNESS_MAJOR_MAX))
 
 /datum/emote/living/burp
 	key = "burp"
@@ -64,10 +68,10 @@
 	if(!ishuman(user))
 		return FALSE
 	
-	make_noise(user, "burp", BURPING_NOISES)
-
 	. = ..()
-	reduce_fullness(user, rand(4,8))
+	if(.)
+		make_noise(user, "burp", BURPING_NOISES)
+		reduce_fullness(user, rand(ADJUST_FULLNESS_MINOR_MIN,ADJUST_FULLNESS_MINOR_MAX))
 
 /datum/emote/living/fart
 	key = "fart"
@@ -80,10 +84,10 @@
 	if(!ishuman(user))
 		return FALSE	
 
-	make_noise(user, "fart", FARTING_NOISES)
-		
 	. = ..()	
-	reduce_fullness(user, rand(4,8))
+	if(.)
+		make_noise(user, "fart", FARTING_NOISES)
+		reduce_fullness(user, rand(ADJUST_FULLNESS_MINOR_MIN,ADJUST_FULLNESS_MINOR_MAX))
 
 /datum/emote/living/gurgle
 	key = "gurgle"
@@ -95,9 +99,10 @@
 	if(!ishuman(user))
 		return FALSE
 
-	make_noise(user, "gurgle", 0)
-
-	. = ..()
+	. = ..()	
+	if(.)
+		make_noise(user, "gurgle", 0)
+	// TODO decrease nutrition
 
 //Shhh... It's a secret! Don't tell or I'll steal your legs
 /datum/emote/living/burunyu
@@ -110,9 +115,9 @@
 	if(!ishuman(user))
 		return FALSE
 
-	make_noise(user, "burunyu", 0)
-
 	. = ..()
+	if(.)
+		make_noise(user, "burunyu", 0)
 
 /datum/emote/living/bellyrub
 	key = "bellyrub"
@@ -122,5 +127,7 @@
 /datum/emote/living/bellyrub/run_emote(mob/living/user, params)
 	if(!ishuman(user))
 		return FALSE
+
 	. = ..()
-	reduce_fullness(user, rand(4,16))
+	if(.)
+		reduce_fullness(user, rand(ADJUST_FULLNESS_MINOR_MIN,ADJUST_FULLNESS_MINOR_MAX))

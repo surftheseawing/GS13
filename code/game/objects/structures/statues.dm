@@ -325,27 +325,27 @@
 /obj/structure/statue/calorite
 	max_integrity = 400
 	material_drop_type = /obj/item/stack/sheet/mineral/calorite
+	var/fat_to_add = ADJUST_FATNESS_CALORITE_STATUE
 
 /obj/structure/statue/calorite/fatty
 	name = "Fatty statue"
 	desc = "A statue of a well-rounded fatso."
 	icon_state = "fatty"
-	var/active = null
+	var/active = 0
 	var/last_event = 0
+	var/event_timer = 15
 
 /obj/structure/statue/calorite/fatty/proc/beckon()
 	if(!active)
-		if(world.time > last_event+15)
+		if(world.time > last_event)
 			active = 1
 			for(var/mob/living/carbon/human/M in orange(3,src))
 				to_chat(M, "<span class='warning'>You feel the statue calling to you, urging you to touch it...</span>")
-			last_event = world.time
-			active = null
-			return
-	return
+			last_event = world.time + event_timer
+			active = 0
 
 /obj/structure/statue/calorite/fatty/proc/statue_fatten(mob/living/carbon/M)
-	if(!M.adjust_fatness(20, FATTENING_TYPE_ITEM))
+	if(!M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM))
 		to_chat(M, "<span class='warning'>Nothing happens.</span>")
 		return 
 
@@ -364,23 +364,27 @@
 
 /obj/structure/statue/calorite/fatty/Bumped(atom/movable/AM)
 	beckon()
-	..()
+	return ..()
 
-/obj/structure/statue/calorite/fatty/Crossed(var/mob/AM)
-	.=..()
-	if(!.)
-		if(istype(AM))
-			beckon()
+/obj/structure/statue/calorite/fatty/Crossed(mob/AM)
+	. = ..()
+	if (.)
+		return
+	if(istype(AM))
+		beckon()
 
 /obj/structure/statue/calorite/fatty/Moved(atom/movable/AM)
 	beckon()
-	..()
+	return ..()
 
 /obj/structure/statue/calorite/fatty/attackby(obj/item/W, mob/living/carbon/M, params)
 	statue_fatten(M)
+	return ..()
 
 /obj/structure/statue/calorite/fatty/attack_hand(mob/living/carbon/M)
 	statue_fatten(M)
+	return ..()
 
 /obj/structure/statue/calorite/fatty/attack_paw(mob/living/carbon/M)
 	statue_fatten(M)
+	return ..()

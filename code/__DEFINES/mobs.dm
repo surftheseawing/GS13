@@ -148,6 +148,39 @@
 #define SANITY_CRAZY 25
 #define SANITY_INSANE 0
 
+// GS13 adjustment modifiers
+#define ADJUST_FATNESS_CALORITE					5
+#define ADJUST_FATNESS_CALORITE_DOOR			(ADJUST_FATNESS_CALORITE* 1) // per tick stunned
+#define ADJUST_FATNESS_CALORITE_FLOOR			(ADJUST_FATNESS_CALORITE* 5)
+#define ADJUST_FATNESS_CALORITE_FLOOR_STRONG	(ADJUST_FATNESS_CALORITE_FLOOR*4)
+#define ADJUST_FATNESS_CALORITE_STATUE			(ADJUST_FATNESS_CALORITE* 4)
+#define ADJUST_FATNESS_CALORITE_WALL			(ADJUST_FATNESS_CALORITE*10)
+
+#define ADJUST_FATNESS_ENERGY				100	// energy/fattening
+#define ADJUST_FATNESS_ENERGY_CANNON		(ADJUST_FATNESS_ENERGY*10)
+#define ADJUST_FATNESS_ENERGY_WEAK			(ADJUST_FATNESS_ENERGY/2)
+#define ADJUST_FATNESS_ENERGY_CANNON_WEAK	(ADJUST_FATNESS_ENERGY_CANNON/2)
+
+#define ADJUST_FATNESS_REAGENT	10	// lipoifier, lipolicide
+#define ADJUST_FATNESS_SYMPTOM	30	// weight_loss
+
+#define ADJUST_FATNESS_VIRUS			5	// weight_gain
+#define ADJUST_FATNESS_VIRUS_RATE_H		12
+#define ADJUST_FATNESS_VIRUS_RATE_M		7
+#define ADJUST_FATNESS_VIRUS_RATE_L		3
+#define ADJUST_FATNESS_VIRUS_H	(ADJUST_FATNESS_VIRUS*ADJUST_FATNESS_VIRUS_RATE_H)
+#define ADJUST_FATNESS_VIRUS_M	(ADJUST_FATNESS_VIRUS*ADJUST_FATNESS_VIRUS_RATE_M)
+#define ADJUST_FATNESS_VIRUS_L	(ADJUST_FATNESS_VIRUS*ADJUST_FATNESS_VIRUS_RATE_L)
+
+#define ADJUST_FATNESS_VORE		75	// percentage of prey's fatness
+
+#define ADJUST_FULLNESS_MAJOR_MAX	12
+#define ADJUST_FULLNESS_MAJOR_MIN	6
+#define ADJUST_FULLNESS_MINOR_MAX	8
+#define ADJUST_FULLNESS_MINOR_MIN	4
+#define ADJUST_NUTRITION_MAJOR		3
+#define ADJUST_NUTRITION_MINOR		1
+
 //Fullness levels, no more infinite eating my dudes!
 #define FULLNESS_LEVEL_NOMOREPLZ 280
 #define FULLNESS_LEVEL_BEEG 140
@@ -155,9 +188,6 @@
 #define FULLNESS_LEVEL_FILLED 40
 #define FULLNESS_LEVEL_HALF_FULL 20
 #define FULLNESS_LEVEL_EMPTY 0
-
-//Fullness emote cooldown
-#define FULLNESS_REDUCTION_COOLDOWN 50
 
 //Fatness levels, Here we go!
 #define FATNESS_LEVEL_BLOB 3440
@@ -284,7 +314,7 @@
 #define WIZARD_AGE_MIN		30	//youngest a wizard can be
 #define APPRENTICE_AGE_MIN	29	//youngest an apprentice can be
 #define SHOES_SLOWDOWN		0	//How much shoes slow you down by default. Negative values speed you up
-#define POCKET_STRIP_DELAY			40	//time taken (in deciseconds) to search somebody's pockets
+#define POCKET_STRIP_DELAY	40	//time taken (in deciseconds) to search somebody's pockets
 #define DOOR_CRUSH_DAMAGE	15	//the amount of damage that airlocks deal when they crush you
 
 #define	HUNGER_FACTOR		0.08	//factor at which mob nutrition decreases

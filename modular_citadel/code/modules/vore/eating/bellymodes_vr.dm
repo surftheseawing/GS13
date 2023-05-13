@@ -113,7 +113,7 @@
 				if(iscarbon(gainer) && owner?.client?.prefs?.weight_gain_food)	
 					var/mob/living/carbon/prey = M
 					if(iscarbon(prey) && prey.fatness)
-						var/fatness_to_add = (prey.fatness * 0.75)
+						var/fatness_to_add = (prey.fatness * ADJUST_FATNESS_VORE / 100)
 						gainer.adjust_fatness(fatness_to_add, FATTENING_TYPE_FOOD)
 				
 				//GS13 EDIT END

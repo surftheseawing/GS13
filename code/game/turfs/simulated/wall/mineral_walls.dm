@@ -49,13 +49,16 @@
 	icon_state = "calorite"
 	sheet_type = /obj/item/stack/sheet/mineral/calorite
 	canSmoothWith = list(/turf/closed/wall/mineral/calorite, /obj/structure/falsewall/calorite)
+	var/fat_to_add = ADJUST_FATNESS_CALORITE_WALL
 
 /turf/closed/wall/mineral/calorite/proc/fatten()
 	if(!active)
 		if(world.time > last_event+15)
 			active = 1
+			// TODO add falloff so you gain less when away from the wall
+			// or reduce the range to adjacent only (1)
 			for(var/mob/living/carbon/human/M in orange(3,src))
-				M.adjust_fatness(50, FATTENING_TYPE_ITEM)	
+				M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)	
 			last_event = world.time
 			active = null
 			return

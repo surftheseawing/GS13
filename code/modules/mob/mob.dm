@@ -451,6 +451,7 @@ mob/visible_message(message, self_message, blind_message, vision_distance = DEFA
 	//if they didnt join as a observer, add their name to the past character list so they cannot play them again.
 
 	if(!usr.client.respawn_observing)
+		// GS13 - allow players to rejoin with the same char
 		var/responserespawn = alert(src,"Are you sure you want to respawn?","Warning","Yes","No")
 		if(responserespawn != "Yes")
 			return

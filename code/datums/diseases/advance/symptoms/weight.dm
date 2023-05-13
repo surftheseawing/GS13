@@ -32,6 +32,7 @@ Bonus
 	threshold_desc = list(
 		"Stealth 4" = "The symptom is less noticeable."
 	)
+	var/fat_to_lose = -1*ADJUST_FATNESS_SYMPTOM
 
 /datum/symptom/weight_loss/Start(datum/disease/advance/A)
 	if(!..())
@@ -51,7 +52,7 @@ Bonus
 			to_chat(M, "<span class='warning'><i>[pick("So hungry...", "You'd kill someone for a bite of food...", "Hunger cramps seize you...")]</i></span>")
 			M.overeatduration = max(M.overeatduration - 100, 0)
 			M.nutrition = max(M.nutrition - 100, 0)
-			M.adjust_fatness(-30, FATTENING_TYPE_WEIGHT_LOSS)	
+			M.adjust_fatness(fat_to_lose, FATTENING_TYPE_WEIGHT_LOSS)	
 
 /datum/symptom/weight_gain
 	name = "Weight Gain"
@@ -83,9 +84,9 @@ Bonus
 				to_chat(M, "<span class='warning'>[pick("You feel oddly full...", "You feel more plush...", "You feel more huggable...", "You hear an odd gurgle from your stomach")]</span>")
 		else
 			to_chat(M, "<span class='warning'><i>[pick("You feel your body churn...", "You feel heavier...", "You hear an ominous gurgle from your belly...", "You feel bulkier...")]</i></span>")
-			if(A.properties["stage_rate"] >= 12) //get chunkier quicker
-				M.adjust_fatness(70, FATTENING_TYPE_VIRUS)	
-			else if(A.properties["stage_rate"] >= 7)
-				M.adjust_fatness(40, FATTENING_TYPE_VIRUS)	
+			if(A.properties["stage_rate"] >= ADJUST_FATNESS_VIRUS_RATE_H) //get chunkier quicker
+				M.adjust_fatness(ADJUST_FATNESS_VIRUS_H, FATTENING_TYPE_VIRUS)	
+			else if(A.properties["stage_rate"] >= ADJUST_FATNESS_VIRUS_RATE_M)
+				M.adjust_fatness(ADJUST_FATNESS_VIRUS_M, FATTENING_TYPE_VIRUS)	
 			else
-				M.adjust_fatness(15, FATTENING_TYPE_VIRUS)
+				M.adjust_fatness(ADJUST_FATNESS_VIRUS_L, FATTENING_TYPE_VIRUS)

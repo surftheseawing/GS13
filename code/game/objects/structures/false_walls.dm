@@ -271,32 +271,31 @@
 	mineral = /obj/item/stack/sheet/mineral/calorite
 	walltype = /turf/closed/wall/mineral/calorite
 	canSmoothWith = list(/obj/structure/falsewall/calorite, /turf/closed/wall/mineral/calorite)
-	var/active = null
+	var/active = 0
 	var/last_event = 0
+	var/fat_to_add = ADJUST_FATNESS_CALORITE_WALL
 
 /obj/structure/falsewall/calorite/proc/fatten()
 	if(!active)
-		if(world.time > last_event+15)
+		if(world.time > last_event)
 			active = 1
 			for(var/mob/living/carbon/human/M in orange(3,src))
-				M.adjust_fatness(50, FATTENING_TYPE_ITEM)
-			last_event = world.time
-			active = null
-			return
-	return
+				M.adjust_fatness(fat_to_add, FATTENING_TYPE_ITEM)
+			last_event = world.time + 15
+			active = 0
 
 /obj/structure/falsewall/calorite/Bumped(atom/movable/AM)
 	fatten()
-	..()
+	return ..()
 
 /obj/structure/falsewall/calorite/attackby(obj/item/W, mob/user, params)
 	fatten()
 	return ..()
 
 /obj/structure/falsewall/calorite/attack_hand(mob/user)
-	fatten()
 	. = ..()
-
+	if (.)
+		fatten()
 
 /obj/structure/falsewall/sandstone
 	name = "sandstone wall"
