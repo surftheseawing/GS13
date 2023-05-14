@@ -14,8 +14,6 @@
 	M.adjust_fatness(fat_to_add, FATTENING_TYPE_CHEM)
 	return ..()
 
-// TODO lipoifier OD -> fizulphite
-
 //BURPY CHEM
 
 /datum/reagent/consumable/fizulphite
@@ -28,7 +26,7 @@
 
 /datum/reagent/consumable/fizulphite/on_mob_life(mob/living/carbon/M)
 	if(M && M?.client?.prefs.weight_gain_chems)
-		M.fullness += ADJUST_FULLNESS_MAJOR_MIN
+		M.fullness += ADJUST_FULLNESS_GAIN
 		if (M.burpslurring < ADJUST_BURPLSLUR_MAX)
 			M.burpslurring += ADJUST_BURPLSLUR_GAIN
 		var/amount = M.reagents.get_reagent_amount(/datum/reagent/consumable/fizulphite)
@@ -52,7 +50,7 @@
 
 /datum/reagent/consumable/extilphite/on_mob_life(mob/living/carbon/M)
 	if(M.fullness > FULLNESS_LEVEL_HALF_FULL)
-		M.fullness -= ADJUST_FULLNESS_MAJOR_MAX
+		M.fullness -= ADJUST_FULLNESS_LOSE
 	if(M && M?.client?.prefs.weight_gain_chems)
 		M.burpslurring -= ADJUST_BURPLSLUR_LOSE
 	return ..()

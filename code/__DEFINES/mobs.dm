@@ -177,10 +177,13 @@
 
 #define ADJUST_FATNESS_VORE		75	// percentage of prey's fatness
 
-#define ADJUST_FULLNESS_MAJOR_MAX	12	// belch, brap, extilphite
-#define ADJUST_FULLNESS_MAJOR_MIN	6	// belch, brap, fizulphite
+#define ADJUST_FULLNESS_MAJOR_MAX	12	// belch, brap
+#define ADJUST_FULLNESS_MAJOR_MIN	6	// belch, brap
 #define ADJUST_FULLNESS_MINOR_MAX	8	// burp, fart
 #define ADJUST_FULLNESS_MINOR_MIN	4	// burp, fart
+
+#define ADJUST_FULLNESS_GAIN	1	// fizulphite
+#define ADJUST_FULLNESS_LOSE	5	// extilphite
 
 #define ADJUST_FULLNESS_DIGEST		20 // ticks per fullness
 
@@ -197,11 +200,11 @@
 #define ADJUST_NUTRITION_MINOR_MIN	4 // gurgle
 
 //Fullness levels, no more infinite eating my dudes!
-#define FULLNESS_LEVEL_NOMOREPLZ 280
-#define FULLNESS_LEVEL_BEEG 140
-#define FULLNESS_LEVEL_BLOATED 80
-#define FULLNESS_LEVEL_FILLED 40
-#define FULLNESS_LEVEL_HALF_FULL 20
+#define FULLNESS_LEVEL_NOMOREPLZ	160
+#define FULLNESS_LEVEL_BEEG			80
+#define FULLNESS_LEVEL_BLOATED		40
+#define FULLNESS_LEVEL_FILLED		20
+#define FULLNESS_LEVEL_HALF_FULL	10
 
 //Fatness levels, Here we go!
 #define FATNESS_LEVEL_BLOB 3440
