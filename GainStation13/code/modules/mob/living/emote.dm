@@ -1,5 +1,5 @@
 //Emote effect cooldown
-#define EMOTE_EFFECT_COOLDOWN 50
+#define EMOTE_EFFECT_COOLDOWN 50 // 5 seconds
 
 /datum/emote/living/proc/make_noise(var/mob/living/user, noise_name, pref_toggle)
 	if(!ishuman(user))
@@ -11,19 +11,48 @@
 		if ((pref_toggle == 0) || (M.client && M.client?.prefs?.cit_toggles & pref_toggle))
 			M.playsound_local(source, noise_name, 50, 1, S = noise)
 
-// fullness_amount should be between 5 and 20 for balance
-/datum/emote/living/proc/reduce_fullness(mob/living/user, fullness_amount)
+/datum/emote/living/proc/handle_emote(mob/living/user, amount)
 	if(!ishuman(user))
 		return FALSE	
-	if(fullness_amount <= 0)
+	if(amount <= 0)
+		return FALSE	
+	return TRUE	
+
+/datum/emote/living/proc/handle_timer(mob/living/user)
+	if (world.time < user.emote_timer)
+		return FALSE	
+	user.emote_timer = world.time + EMOTE_EFFECT_COOLDOWN
+	return TRUE	
+
+/datum/emote/living/proc/reduce_fullness(mob/living/user, amount)
+	if (!handle_emote(user, amount))
+		return FALSE	
+	if(user.fullness < FULLNESS_LEVEL_BLOATED)
+		return FALSE	
+	if (!handle_timer(user))
 		return FALSE	
 
-	if((user.fullness >= FULLNESS_LEVEL_BLOATED) && (user.fullness_reduction_timer + EMOTE_EFFECT_COOLDOWN < world.time))
-		user.fullness -= fullness_amount
-		if(fullness_amount > 5)
-			to_chat(user, "You felt that make a lot of space!")
-		else
-			to_chat(user, "You felt that make some space.")
+	user.fullness -= amount
+
+	if(amount > 5)
+		to_chat(user, "You felt that make a lot of space!")
+	else
+		to_chat(user, "You felt that make some space.")
+
+/datum/emote/living/proc/reduce_nutrition(mob/living/user, amount)
+	if (!handle_emote(user, amount))
+		return FALSE	
+	if(user.nutrition < NUTRITION_LEVEL_FED)
+		return FALSE	
+	if (!handle_timer(user, amount))
+		return FALSE	
+
+	user.nutrition -= amount
+
+	if(amount > 5)
+		to_chat(user, "You feel hungry!")
+	else
+		to_chat(user, "You feel peckish.")
 
 /datum/emote/living/belch
 	key = "belch"
@@ -102,7 +131,7 @@
 	. = ..()	
 	if(.)
 		make_noise(user, "gurgle", 0)
-	// TODO decrease nutrition
+		reduce_nutrition(user, rand(ADJUST_NUTRITION_MINOR_MIN,ADJUST_NUTRITION_MINOR_MAX))
 
 //Shhh... It's a secret! Don't tell or I'll steal your legs
 /datum/emote/living/burunyu

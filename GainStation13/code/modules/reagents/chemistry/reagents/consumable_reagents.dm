@@ -28,8 +28,9 @@
 
 /datum/reagent/consumable/fizulphite/on_mob_life(mob/living/carbon/M)
 	if(M && M?.client?.prefs.weight_gain_chems)
-		M.burpslurring = max(M.burpslurring,50)
-		M.burpslurring += 2
+		M.fullness += ADJUST_FULLNESS_MAJOR_MIN
+		if (M.burpslurring < ADJUST_BURPLSLUR_MAX)
+			M.burpslurring += ADJUST_BURPLSLUR_GAIN
 		var/amount = M.reagents.get_reagent_amount(/datum/reagent/consumable/fizulphite)
 		if(amount >= 3)
 			to_chat(M,"<span class='notice'>You feel pretty gassy...</span>")
@@ -37,10 +38,7 @@
 		else if(amount >= 1)
 			to_chat(M,"<span class='notice'>You feel substantially bloated...</span>")
 			M.emote("burp")
-	M.fullness += 6
 	return ..()
-
-// TODO increase fullness
 
 //ANTI-BURPY CHEM
 
@@ -53,10 +51,10 @@
 	metabolization_rate = 0.8 * REAGENTS_METABOLISM
 
 /datum/reagent/consumable/extilphite/on_mob_life(mob/living/carbon/M)
-	if(M && M?.client?.prefs.weight_gain_chems)
-		M.burpslurring -= 3
 	if(M.fullness > FULLNESS_LEVEL_HALF_FULL)
-		M.fullness -= 10
+		M.fullness -= ADJUST_FULLNESS_MAJOR_MAX
+	if(M && M?.client?.prefs.weight_gain_chems)
+		M.burpslurring -= ADJUST_BURPLSLUR_LOSE
 	return ..()
 
 //FARTY CHEM
@@ -71,11 +69,12 @@
 
 /datum/reagent/consumable/flatulose/on_mob_life(mob/living/carbon/M)
 	if(M && M?.client?.prefs.weight_gain_chems)
-		if(M.reagents.get_reagent_amount(/datum/reagent/consumable/flatulose) < 1)
-			to_chat(M,"<span class='notice'>You feel substantially bloated...</span>")
-		if(M.reagents.get_reagent_amount(/datum/reagent/consumable/flatulose) > 3)
+		var/amount = M.reagents.get_reagent_amount(/datum/reagent/consumable/flatulose)
+		if(amount > 3)
 			to_chat(M,"<span class='notice'>You feel pretty gassy...</span>")
 			M.emote(pick("brap","fart")) // we gotta categorize this into "slob" category or something later! - GDLW2
+		else if(amount > 1)
+			to_chat(M,"<span class='notice'>You feel substantially bloated...</span>")
 	return ..()
 
 // calorite blessing chem, used in the golem ability

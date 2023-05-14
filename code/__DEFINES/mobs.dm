@@ -161,7 +161,10 @@
 #define ADJUST_FATNESS_ENERGY_WEAK			(ADJUST_FATNESS_ENERGY/2)
 #define ADJUST_FATNESS_ENERGY_CANNON_WEAK	(ADJUST_FATNESS_ENERGY_CANNON/2)
 
-#define ADJUST_FATNESS_REAGENT	10	// lipoifier, lipolicide
+#define ADJUST_FATNESS_REAGENT				10	// lipoifier
+#define ADJUST_FATNESS_REAGENT_LOSE			(ADJUST_FATNESS_REAGENT/2)	// lipolicide
+#define ADJUST_FATNESS_REAGENT_LOSE_WEAK	5	// proportion of ADJUST_FATNESS_REAGENT_LOSE
+
 #define ADJUST_FATNESS_SYMPTOM	30	// weight_loss
 
 #define ADJUST_FATNESS_VIRUS			5	// weight_gain
@@ -174,12 +177,24 @@
 
 #define ADJUST_FATNESS_VORE		75	// percentage of prey's fatness
 
-#define ADJUST_FULLNESS_MAJOR_MAX	12
-#define ADJUST_FULLNESS_MAJOR_MIN	6
-#define ADJUST_FULLNESS_MINOR_MAX	8
-#define ADJUST_FULLNESS_MINOR_MIN	4
-#define ADJUST_NUTRITION_MAJOR		3
-#define ADJUST_NUTRITION_MINOR		1
+#define ADJUST_FULLNESS_MAJOR_MAX	12	// belch, brap, extilphite
+#define ADJUST_FULLNESS_MAJOR_MIN	6	// belch, brap, fizulphite
+#define ADJUST_FULLNESS_MINOR_MAX	8	// burp, fart
+#define ADJUST_FULLNESS_MINOR_MIN	4	// burp, fart
+
+#define ADJUST_FULLNESS_DIGEST		20 // ticks per fullness
+
+#define ADJUST_BURPLSLUR_MAX	50	// fizulphite
+#define ADJUST_BURPLSLUR_GAIN	2	// fizulphite
+#define ADJUST_BURPLSLUR_LOSE	3	// extilphite
+
+#define ADJUST_OVEREAT_MAX		    	5000 // 50 seconds
+#define ADJUST_OVEREAT_FULLESS_SELF		2000 // extra capacity
+#define ADJUST_OVEREAT_FULLESS_OTHER	1000 // extra capacity
+
+#define ADJUST_NUTRITION_REAGENT	3 // lipolicide
+#define ADJUST_NUTRITION_MINOR_MAX	8 // gurgle
+#define ADJUST_NUTRITION_MINOR_MIN	4 // gurgle
 
 //Fullness levels, no more infinite eating my dudes!
 #define FULLNESS_LEVEL_NOMOREPLZ 280
@@ -187,7 +202,6 @@
 #define FULLNESS_LEVEL_BLOATED 80
 #define FULLNESS_LEVEL_FILLED 40
 #define FULLNESS_LEVEL_HALF_FULL 20
-#define FULLNESS_LEVEL_EMPTY 0
 
 //Fatness levels, Here we go!
 #define FATNESS_LEVEL_BLOB 3440

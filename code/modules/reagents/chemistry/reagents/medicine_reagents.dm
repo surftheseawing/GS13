@@ -1530,7 +1530,7 @@ datum/reagent/medicine/styptic_powder/overdose_start(mob/living/M)
 	color = "#F0FFF0"
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 	overdose_threshold = 100
-	var/fat_to_lose = -1*ADJUST_FATNESS_REAGENT
+	var/fat_to_lose = -1*ADJUST_FATNESS_REAGENT_LOSE
 
 /datum/reagent/medicine/lipolicide/overdose_process(mob/living/carbon/C)
 	. = ..()
@@ -1543,9 +1543,12 @@ datum/reagent/medicine/styptic_powder/overdose_start(mob/living/M)
 		M.adjustToxLoss(1*REM, 0)
 
 	if(M.fatness == 0)
-		M.nutrition = max(M.nutrition - ADJUST_NUTRITION_MAJOR, 0)
+		M.nutrition = max(M.nutrition - ADJUST_NUTRITION_REAGENT, 0)
 	else
-		M.adjust_fatness(fat_to_lose, FATTENING_TYPE_WEIGHT_LOSS)
+		if (HAS_TRAIT(M, TRAIT_LIPOLICIDE_TOLERANCE)) // GS13
+			M.adjust_fatness(fat_to_lose/ADJUST_FATNESS_REAGENT_LOSE_WEAK, FATTENING_TYPE_WEIGHT_LOSS)
+		else
+			M.adjust_fatness(fat_to_lose, FATTENING_TYPE_WEIGHT_LOSS)
 
 	M.overeatduration = 0
 	return ..()

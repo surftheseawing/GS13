@@ -292,10 +292,7 @@
 	print_mood(user)
 
 /datum/component/mood/proc/HandleFatness(mob/living/carbon/L)
-	if(!L)
-		return FALSE
-		
-	switch(L.fatness)
+	switch(L?.fatness)
 		if(FATNESS_LEVEL_FAT to INFINITY)
 			if(HAS_TRAIT(L, TRAIT_FAT_GOOD))
 				add_event(null, "fatness", /datum/mood_event/fat_good)
@@ -303,7 +300,7 @@
 				add_event(null, "fatness", /datum/mood_event/fat_bad)
 
 /datum/component/mood/proc/HandleNutrition(mob/living/L)
-	switch(L.nutrition)
+	switch(L?.nutrition)
 		if(NUTRITION_LEVEL_WELL_FED to INFINITY)
 			add_event(null, "nutrition", /datum/mood_event/wellfed)
 		if( NUTRITION_LEVEL_FED to NUTRITION_LEVEL_WELL_FED)
@@ -317,8 +314,8 @@
 
 /datum/component/mood/proc/HandleThirst(mob/living/L)
 	if(THIRST_LEVEL_THRESHOLD)
-		L.thirst = clamp(L.thirst, 0, THIRST_LEVEL_THRESHOLD)
-	switch(L.thirst)
+		L?.thirst = clamp(L?.thirst, 0, THIRST_LEVEL_THRESHOLD)
+	switch(L?.thirst)
 		if(THIRST_LEVEL_QUENCHED to INFINITY)
 			add_event(null, "thirst", /datum/mood_event/quenched)
 		if(THIRST_LEVEL_THIRSTY to THIRST_LEVEL_QUENCHED)

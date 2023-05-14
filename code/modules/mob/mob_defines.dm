@@ -67,8 +67,8 @@
 	var/thirst = THIRST_LEVEL_START_MIN	//same for this
 	var/satiety = 0//Carbon
 
-	var/overeatduration = 0		// How long this guy is overeating //Carbon
-	var/fullness_reduction_timer = 0 // When was the last time they emoted to reduce their fullness
+	var/overeatduration = 0	// How long this guy is overeating //Carbon
+	var/emote_timer = 0	// When was the last time they emoted
 	var/a_intent = INTENT_HELP//Living
 	var/list/possible_a_intents = null//Living
 	var/m_intent = MOVE_INTENT_RUN//Living
