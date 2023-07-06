@@ -386,8 +386,7 @@
 		if(digitalcamo)
 			msg += "[t_He] [t_is] moving [t_his] body in an unnatural and blatantly inhuman manner.\n"
 
-	if(client?.prefs?.noncon_weight_gain)
-		msg += "<span class='purple'><b>Non-con fattening is allowed</b></span>\n"	
+	msg += "<span class='purple'><b>Non-con fattening is[client?.prefs?.noncon_weight_gain == TRUE ? "" : " not"] allowed</b></span>\n"	
 
 	if (length(msg))
 		. += "<span class='warning'>[msg.Join("")]</span>"
