@@ -323,7 +323,7 @@
 		var/turf/source = get_turf(owner)
 		var/sound/eating = sound(GLOB.vore_sounds[vore_sound])
 		for(var/mob/living/M in get_hearers_in_view(3, source))
-			if(M.client && M.client?.prefs?.cit_toggles & EATING_NOISES)
+			if(M.client?.prefs?.cit_toggles & EATING_NOISES)
 				M.playsound_local(source, vore_sound, 50, 1, S = eating)
 
 	owner.updateVRPanel()
@@ -457,17 +457,23 @@
 	owner.updateVRPanel()
 
 //Digest a single item
-//Receives a return value from digest_act that's how much nutrition
-//the item should be worth
 /obj/belly/proc/digest_item(var/obj/item/item)
-	var/digested = item.digest_act(src, owner)
-	if(!digested)
+	//	/obj/item/reagent_containers/food/digest_act()
+	//		carbon:	tranfer reagents from food to pred
+	//		cyborg:	increase cell charge
+	//	/obj/item/proc/digest_act()
+	//		move contents to belly
+	//		return w_class
+	var/nutrition = item.digest_act(src, owner)
+	if(!nutrition)
 		items_preserved |= item
 	else
-//		owner.nutrition += (5 * digested) // haha no.
+		// TODO register nutrition multipliers as adjustment modifiers in chems branch
 		if(iscyborg(owner))
 			var/mob/living/silicon/robot/R = owner
-			R.cell.charge += (50 * digested)
+			R.cell.charge += (50 * nutrition)
+		else if(HAS_TRAIT(H, TRAIT_TRASHCAN))
+			owner.nutrition += (5 * nutrition) // haha yes!
 
 //Determine where items should fall out of us into.
 //Typically just to the owner's location.

@@ -102,7 +102,9 @@
 	. = ..() */
 
 /obj/item/organ/digest_act(var/atom/movable/item_storage = null)
-	if((. = ..()))
+	. = ..()
+	if (.)
+		// TODO register nutrition multiplier as adjustment modifier in chems branch
 		. += 70 //Organs give a little more
 
 /obj/item/storage/digest_act(var/atom/movable/item_storage = null)
